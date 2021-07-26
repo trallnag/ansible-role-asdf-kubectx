@@ -1,0 +1,16 @@
+- name: Check if tool in the correct version is installed
+  shell: |
+    kubectx_version=$(kubectx --version)
+    kubens_version=$(kubens --version)
+    if [ $kubectx_version != {{ asdf_kubectx_version }} ] && [ $kubens_version != {{ asdf_kubectx_version }} ]; then
+      echo status=changed
+    fi
+  register: task
+  changed_when: "'status=changed' in task.stdout"
+  notify:
+    - "{{ role_name }} : Add plugin"
+    - "{{ role_name }} : Install package"
+    - "{{ role_name }} : Set global"
+    - "{{ role_name }} : Bash tab-completion kubectx"
+    - "{{ role_name }} : Bash tab-completion kubens"
+    - "{{ role_name }} : Check version"

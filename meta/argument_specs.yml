@@ -1,0 +1,17 @@
+argument_specs:
+  main:
+    short_description: Main entry point for the "{{ role_name }}" role
+    options:
+      asdf_kubectx_version:
+        default: 0.9.4
+        type: raw
+        required: false
+        description: >-
+          Version to install and activate globally.
+
+      asdf_kubectx_git_url:
+        default: https://gitlab.com/wt0f/asdf-kubectx
+        type: raw
+        required: false
+        description: >-
+          Git repo containing the plugin.

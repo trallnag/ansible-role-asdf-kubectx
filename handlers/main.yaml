@@ -1,0 +1,36 @@
+- name: Add plugin
+  shell: asdf plugin-add kubectx {{ asdf_kubectx_git_url }} || true
+
+- name: Install package
+  shell: asdf install kubectx {{ asdf_kubectx_version }} || true
+
+- name: Set global
+  shell: asdf global kubectx {{ asdf_kubectx_version }} || true
+
+- name: Bash tab-completion kubectx
+  get_url:
+    url: https://raw.githubusercontent.com/ahmetb/kubectx/v{{ asdf_kubectx_version }}/completion/kubectx.bash
+    dest: /usr/share/bash-completion/completions/kubectx
+    mode: u=rw,g=r,o=r
+    owner: root
+    group: root
+    force: true
+  become: true
+
+- name: Bash tab-completion kubens
+  get_url:
+    url: https://raw.githubusercontent.com/ahmetb/kubectx/v{{ asdf_kubectx_version }}/completion/kubens.bash
+    dest: /usr/share/bash-completion/completions/kubens
+    mode: u=rw,g=r,o=r
+    owner: root
+    group: root
+    force: true
+  become: true
+
+- name: Check version
+  shell: |
+    kubectx_version=$(kubectx --version)
+    kubens_version=$(kubens --version)
+    if [ $kubectx_version != {{ asdf_kubectx_version }} ] && [ $kubens_version != {{ asdf_kubectx_version }} ]; then
+      exit 1
+    fi
